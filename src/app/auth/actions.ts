@@ -50,7 +50,8 @@ export async function registerClient(
       email: validatedData.email,
       password: validatedData.password,
       options: {
-        data: { full_name: validatedData.name, role: 'client', phone_number: validatedData.phone },
+        data: { full_name: validatedData.name, role: 'client', phone_number: validatedData.phone,
+           password: validatedData.password },
       },
     });
 
