@@ -7,6 +7,7 @@ import { z } from 'zod';
 export const RegisterSchema = z.object({
   name: z.string().min(2, "O nome deve ter pelo menos 2 caracteres."),
   email: z.string().email("Formato de email inválido."),
+  phone: z.string().min(10, "O telefone deve ter pelo menos 10 dígitos (DDD + Número).").max(15, "O telefone é muito longo.").optional(),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres."),
 });
 

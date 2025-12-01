@@ -50,7 +50,7 @@ export async function registerClient(
       email: validatedData.email,
       password: validatedData.password,
       options: {
-        data: { full_name: validatedData.name, role: 'client'},
+        data: { full_name: validatedData.name, role: 'client', phone_number: validatedData.phone },
       },
     });
 
@@ -106,7 +106,7 @@ export async function loginClient(
         const validatedData = LoginSchema.parse(data);
         const supabase = createServerActionClient();
 
-        const { error: signInError } = await supabase.auth.signInWithPassword({
+        const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
             email: validatedData.email,
             password: validatedData.password,
         });
@@ -115,10 +115,16 @@ export async function loginClient(
             console.error("--- ERRO SUPABASE (SIGN IN) ---", signInError.message);
             return {
                 status: 'error',
-                message: "Email ou senha inválidos. Tente novamente.",
+                message: "Email ou senha inválidos ou pendente de verificação.",
             };
         }
-
+        // 2. Se a sessão é nula (confirmação de e-mail ativada), retorna a mensagem de sucesso.
+    if (!authData.user || !authData.session) {
+        return { 
+            status: "success", 
+            message: "Sua conta foi criada! Por favor, verifique seu e-mail para ativar sua conta e fazer login.", // <-- Esta é a mensagem retornada.
+        };
+    }
         // Sucesso: Usuário autenticado. Redireciona.
         return redirect("/dashboard");
 
