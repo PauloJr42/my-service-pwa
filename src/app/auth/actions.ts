@@ -67,7 +67,7 @@ export async function registerClient(
     }
     
     // Sucesso: Usuário criado e logado. Redireciona para o Dashboard.
-    return redirect("/dashboard");
+    return redirect("/auth/login");
 
   } catch (err) {
     
